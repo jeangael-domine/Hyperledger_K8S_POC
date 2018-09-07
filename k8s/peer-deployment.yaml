@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peer-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: peer0
+  template:
+    metadata:
+      labels:
+        component: peer0
+    spec:
+      containers:
+        - name: couchdb0
+          image: hyperledger/fabric-couchdb
+          ports:
+            - containerPort: 5984
+          env:
+            - name: COUCHDB_USER
+              value: couchdb
+            - name: COUCHDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: couch-db-secret
+                  key: COUCHDB_PASSWORD
+
+# kubectl create secret generic couch_db_secret --from-literal COUCHDB_PASSWORD=couchdb
