@@ -33,4 +33,4 @@ spec:
          volumeMounts:
             - mountPath: /etc/hyperledger/fabric-ca-server-config
               name: crypto-config-volume
-              subPath: ca
+              subPath: peerOrganizations/org1.example.com/ca
