@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: channel-artifacts-volume
+spec:
+  volumes:
+    - name: channel-artifacts-volume
+      hostPath:
+      # directory location on host
+      path: /root/articles/fabric_on_kubernetes/Fabric-on-K8S/setupCluster/channel-artifacts/
+      # this field is optional
+      type: Directory
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: crypto-config-volume
+spec:
+  volumes:
+    - name: crypto-config-volume
+      hostPath:
+      # directory location on host
+      path: /root/articles/fabric_on_kubernetes/Fabric-on-K8S/setupCluster/crypto-config/
+      # this field is optional
+      type: Directory
