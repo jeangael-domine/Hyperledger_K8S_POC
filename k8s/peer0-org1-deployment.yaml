@@ -80,7 +80,7 @@ spec:
             name: run
       volumes:
         - hostPath:
-            path: /root/Hyperledger_K8S_POC/crypto-config/peerOrganizations/org1example.com/peers/peer0.org1.example.com/msp
+            path: /root/Hyperledger_K8S_POC/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
           name: peer0-org1-msp-volume
         - hostPath:
             path: /root/Hyperledger_K8S_POC/channel-artifacts/genesis.block
