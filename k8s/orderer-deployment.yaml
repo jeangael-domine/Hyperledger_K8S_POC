@@ -42,7 +42,7 @@ spec:
         command: ["orderer"]
         volumeMounts:
          - mountPath: /var/hyperledger/orderer/msp 
-           name: certificate
+           name: orderer-msp-volume
            #subPath: crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp
            #subPath: orderers/orderer.example.com/msp
         # - mountPath: /var/hyperledger/orderer/tls
