@@ -14,23 +14,27 @@ spec:
     spec:
       containers:
         - name: ca
-         image: hyperledger/fabric-ca
-         env: 
-         - name:  FABRIC_CA_HOME
-           value: /etc/hyperledger/fabric-ca-server
-         - name:  FABRIC_CA_SERVER_CA_NAME
-           value: ca
-         - name:  FABRIC_CA_SERVER_TLS_ENABLED
-           value: "false"
-        # - name:  FABRIC_CA_SERVER_TLS_CERTFILE
-        #   value: $tlsCert
-        # - name:  FABRIC_CA_SERVER_TLS_KEYFILE
-        #   value: $tlsKey
-         ports:
-          - containerPort: 7054
-         command: ["sh"]
-         args:  ["-c", fabric-ca-server start -b admin:adminpw -d]
-         volumeMounts:
+          image: hyperledger/fabric-ca
+          env: 
+            - name:  FABRIC_CA_HOME
+              value: /etc/hyperledger/fabric-ca-server
+            - name:  FABRIC_CA_SERVER_CA_NAME
+              value: ca
+            - name:  FABRIC_CA_SERVER_TLS_ENABLED
+              value: "false"
+            # - name:  FABRIC_CA_SERVER_TLS_CERTFILE
+            #   value: $tlsCert
+            # - name:  FABRIC_CA_SERVER_TLS_KEYFILE
+            #   value: $tlsKey
+          ports:
+            - containerPort: 7054
+          command: ["sh"]
+          args: ["-c", "fabric-ca-server start -b admin:adminpw -d"]
+          volumeMounts:
             - mountPath: /etc/hyperledger/fabric-ca-server-config
               name: crypto-config-volume
-              subPath: peerOrganizations/org1.example.com/ca
+      volumes:
+        - name: crypto-config-volume
+          persistentVolumeClaim:
+            claimName: crypto-config-volume-claim
+          
