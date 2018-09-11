@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderer-node-port
+spec:
+  type: NodePort
+  selector:
+    component: ca
+  ports:
+    - port: 7050
+      targetPort: 7050
+      nodePort: 31517

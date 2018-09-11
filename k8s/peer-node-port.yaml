@@ -10,3 +10,12 @@ spec:
     - port: 5984
       targetPort: 5984
       nodePort: 31515
+    - port: 7051
+      targetPort: 7051
+      nodePort: 31518
+    - port: 7052
+      targetPort: 7052
+      nodePort: 31519
+    - port: 7053
+      targetPort: 7053
+      nodePort: 31520

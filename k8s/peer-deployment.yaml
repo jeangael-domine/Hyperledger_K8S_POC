@@ -25,5 +25,67 @@ spec:
                 secretKeyRef:
                   name: couch-db-secret
                   key: COUCHDB_PASSWORD
-
+        - name: peer0-org1 
+          image: hyperledger/fabric-peer
+          env:
+          - name: CORE_LEDGER_STATE_STATEDATABASE
+            value: "CouchDB"
+          - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
+            value: "localhost:5984"
+          - name: CORE_VM_ENDPOINT
+            value: "unix:///host/var/run/docker.sock"
+          - name: CORE_LOGGING_LEVEL
+            value: "DEBUG"
+          - name: CORE_PEER_TLS_ENABLED
+            value: "false"
+          - name: CORE_PEER_GOSSIP_USELEADERELECTION
+            value: "true"
+          - name: CORE_PEER_GOSSIP_ORGLEADER
+            value: "false" 
+          - name: CORE_PEER_PROFILE_ENABLED
+            value: "true"
+          #- name: CORE_PEER_TLS_CERT_FILE
+          #  value: "/etc/hyperledger/fabric/tls/server.crt" 
+          #- name: CORE_PEER_TLS_KEY_FILE
+          #  value: "/etc/hyperledger/fabric/tls/server.key"
+          #- name: CORE_PEER_TLS_ROOTCERT_FILE
+          #  value: "/etc/hyperledger/fabric/tls/ca.crt"
+          - name: CORE_PEER_ID
+            value: peer0.org1.example.com
+          - name: CORE_PEER_ADDRESS
+            value: peer0.org1.example.com:7051
+          - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
+            value: peer0.org1.example.com:7051
+          - name: CORE_PEER_LOCALMSPID
+            value: Org1MSP
+          workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+          ports:
+          - containerPort: 7051
+          - containerPort: 7052
+          - containerPort: 7053
+          command: ["peer"]
+          args: ["node","start"]
+          volumeMounts:
+          #- mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts 
+          #  name: certificate
+          #  subPath: channel-artifacts
+          - mountPath: /etc/hyperledger/fabric/msp
+            name: peer0-org1-msp-volume
+            #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
+          #- mountPath: /etc/hyperledger/fabric/tls
+          #  name: certificate
+          #  #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/
+          #  subPath: peers/peer0.org1/tls
+          - mountPath: /host/var/run/
+            name: run
+      volumes:
+        - hostPath:
+            path: /root/Hyperledger_K8S_POC/crypto-config/peerOrganizations/org1example.com/peers/peer0.org1.example.com/msp
+          name: peer0-org1-msp-volume
+        - hostPath:
+            path: /root/Hyperledger_K8S_POC/channel-artifacts/genesis.block
+          name: genesis-block-volume
+        - name: run
+          hostPath:
+            path: /run
 # kubectl create secret generic couch_db_secret --from-literal COUCHDB_PASSWORD=couchdb
