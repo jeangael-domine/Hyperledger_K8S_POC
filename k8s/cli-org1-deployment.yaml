@@ -4,10 +4,13 @@ metadata:
    name: cli-org1
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      component: cli-org1
   template:
     metadata:
       labels:
-       app: cli-org1
+       component: cli-org1
     spec:
       containers:
         - name: cli
