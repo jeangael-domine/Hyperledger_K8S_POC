@@ -5,7 +5,7 @@ metadata:
 spec:
   type: NodePort
   selector:
-    component: ca
+    component: orderer
   ports:
     - port: 7050
       targetPort: 7050
