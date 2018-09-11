@@ -35,6 +35,5 @@ spec:
               name: crypto-config-artifacts-volume
       volumes:
         - hostPath:
-             path: /root/Hyperledger_K8S_POC/crypto-config/peerOrganizations/org1.example.com/ca
-           name: crypto-config-artifacts-volume
-          
+            path: /root/Hyperledger_K8S_POC/crypto-config/peerOrganizations/org1.example.com/ca
+          name: crypto-config-artifacts-volume         
