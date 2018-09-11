@@ -8,7 +8,7 @@ spec:
   accessModes:
     - ReadOnlyMany
   hostPath:
-    path: /root/articles/fabric_on_kubernetes/Fabric-on-K8S/setupCluster/channel-artifacts/
+    path: /root/Hyperledger_K8S_POC/channel-artifacts/
 
 ---
 
@@ -22,4 +22,17 @@ spec:
   accessModes:
     - ReadOnlyMany
   hostPath:
-    path: /root/articles/fabric_on_kubernetes/Fabric-on-K8S/setupCluster/crypto-config/
+    path: /root/Hyperledger_K8S_POC/crypto-config/
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: crypto-config-volume-claim
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 100Mi
