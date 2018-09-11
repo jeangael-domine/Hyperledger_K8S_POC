@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: peer-deployment
+  name: peer0-org1-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      component: peer0
+      component: peer0-org1
   template:
     metadata:
       labels:
-        component: peer0
+        component: peer0-org1
     spec:
       containers:
         - name: couchdb0
