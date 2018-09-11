@@ -33,7 +33,7 @@ spec:
           - name: CORE_PEER_ID
             value: cli
           - name: CORE_PEER_ADDRESS
-            value: peer0.org1.example.com:7051
+            value: peer0-org1-node-port:7051
           - name: CORE_PEER_LOCALMSPID
             value: Org1MSP
           - name: CORE_PEER_MSPCONFIGPATH
@@ -47,9 +47,9 @@ spec:
           #   subPath: scripts
            - mountPath: /host/var/run/
              name: run
-           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
+           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode
              name: chaincode-volume
-           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto
              name: crypto-volume
            - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
              name: channel-volume
