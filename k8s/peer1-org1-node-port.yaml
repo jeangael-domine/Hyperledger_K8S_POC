@@ -5,7 +5,7 @@ metadata:
 spec:
   type: NodePort
   selector:
-    component: peer0
+    component: peer1-org1
   ports:
     - name: couchdb
       port: 5984
