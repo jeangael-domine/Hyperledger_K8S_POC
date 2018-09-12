@@ -47,7 +47,7 @@ spec:
           #   subPath: scripts
            - mountPath: /host/var/run/
              name: run
-           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode
+           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02
              name: chaincode-volume
            - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto
              name: crypto-volume
@@ -58,7 +58,7 @@ spec:
             path: /root/Hyperledger_K8S_POC/crypto-config
           name: crypto-volume
         - hostPath:
-            path: /root/Hyperledger_K8S_POC/chaincode
+            path: /root/Hyperledger_K8S_POC/chaincode/chaincode_example02/go
           name: chaincode-volume
         - hostPath:
             path: /root/Hyperledger_K8S_POC/channel-artifacts
