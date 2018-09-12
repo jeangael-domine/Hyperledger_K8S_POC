@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-   name: cli-org1
+   name: cli-org1-deployment
 spec:
   replicas: 1
   selector:
