@@ -1,0 +1,20 @@
+kubectl delete cli-org1-deployment
+kubectl delete ca-deployment
+kubectl delete orderer-deployment
+kubectl delete peer1-org1-deployment
+kubectl delete peer1-org1-deployment
+
+kubectl delete service ca-node-port
+kubectl delete service orderer-node-port
+kubectl delete service peer0-org1-node-port
+kubectl delete service peer1-org1-node-port
+
+kubectl delete pv crypto-config-volume
+kubectl delete pv channel-artifacts-volume
+kubectl delete pvc crypto-config-volume-claim
+
+kubectl get deployments
+kubectl get pods
+kubectl get services
+kubectl get pv
+kubectl get pvc
