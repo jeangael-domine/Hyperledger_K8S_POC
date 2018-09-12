@@ -1,8 +1,8 @@
-kubectl delete cli-org1-deployment
-kubectl delete ca-deployment
-kubectl delete orderer-deployment
-kubectl delete peer1-org1-deployment
-kubectl delete peer1-org1-deployment
+kubectl delete deployment cli-org1-deployment
+kubectl delete deployment ca-deployment
+kubectl delete deployment orderer-deployment
+kubectl delete deployment peer0-org1-deployment
+kubectl delete deployment peer1-org1-deployment
 
 kubectl delete service ca-node-port
 kubectl delete service orderer-node-port
