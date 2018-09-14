@@ -26,7 +26,7 @@ spec:
               #  secretKeyRef:
               #    name: couch-db-secret
               #    key: COUCHDB_PASSWORD
-        - name: peer0-org1 
+        - name: peer0-org1
           image: hyperledger/fabric-peer
           env:
           - name: CORE_LEDGER_STATE_STATEDATABASE
@@ -34,7 +34,7 @@ spec:
           - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
             value: "localhost:5984"
           - name: CORE_VM_ENDPOINT
-            value: "unix:///host/var/run/docker.sock"
+            value: "http://localhost:2375"
           - name: CORE_LOGGING_LEVEL
             value: "DEBUG"
           - name: CORE_PEER_TLS_ENABLED
@@ -81,6 +81,14 @@ spec:
           #  subPath: peers/peer0.org1/tls
           - mountPath: /host/var/run/
             name: run
+        - image: docker:dind
+          name: dind
+          securityContext:
+            privileged: true
+          volumeMounts:
+          - mountPath: /var/lib/docker
+            mountPropagation: ""
+            name: docker-graph-storage
       volumes:
         - hostPath:
             path: /root/Hyperledger_K8S_POC/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
@@ -90,5 +98,7 @@ spec:
           name: genesis-block-volume
         - name: run
           hostPath:
-            path: /run
+            path: /var/run
+        - name: docker-graph-storage 
+          emptyDir: {}
 # kubectl create secret generic couch_db_secret --from-literal COUCHDB_PASSWORD=couchdb

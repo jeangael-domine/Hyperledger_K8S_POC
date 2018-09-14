@@ -26,7 +26,7 @@ spec:
               #  secretKeyRef:
               #    name: couch-db-secret
               #    key: COUCHDB_PASSWORD
-        - name: peer1-org1 
+        - name: peer1-org1
           image: hyperledger/fabric-peer
           env:
           - name: CORE_LEDGER_STATE_STATEDATABASE
@@ -34,7 +34,7 @@ spec:
           - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
             value: "localhost:5984"
           - name: CORE_VM_ENDPOINT
-            value: "unix:///host/var/run/docker.sock"
+            value: "http://localhost:2375"
           - name: CORE_LOGGING_LEVEL
             value: "DEBUG"
           - name: CORE_PEER_TLS_ENABLED
@@ -72,20 +72,30 @@ spec:
           #- mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts 
           #  name: certificate
           #  subPath: channel-artifacts
-          - mountPath: /etc/hyperledger/fabric/msp
-            name: peer1-org1-msp-volume
+            - mountPath: /etc/hyperledger/fabric/msp
+              name: peer1-org1-msp-volume
             #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp
           #- mountPath: /etc/hyperledger/fabric/tls
           #  name: certificate
           #  #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/
           #  subPath: peers/peer1.org1/tls
-          - mountPath: /host/var/run/
-            name: run
+            - mountPath: /host/var/run/
+              name: run
+        - image: docker:dind
+          name: dind
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /var/lib/docker
+              mountPropagation: ""
+              name: docker-graph-storage
       volumes:
         - hostPath:
             path: /root/Hyperledger_K8S_POC/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp
           name: peer1-org1-msp-volume
         - name: run
           hostPath:
-            path: /run
+            path: /var/run
+        - name: docker-graph-storage 
+          emptyDir: {}
 # kubectl create secret generic couch_db_secret --from-literal COUCHDB_PASSWORD=couchdb
