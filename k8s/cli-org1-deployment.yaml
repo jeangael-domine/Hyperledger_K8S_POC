@@ -53,6 +53,8 @@ spec:
              name: crypto-volume
            - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
              name: channel-volume
+           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/script.sh
+             name: scripts-volume
       volumes:
         - hostPath:
             path: /root/Hyperledger_K8S_POC/crypto-config
@@ -63,6 +65,9 @@ spec:
         - hostPath:
             path: /root/Hyperledger_K8S_POC/channel-artifacts
           name: channel-volume
+        - hostPath:
+            path: /root/Hyperledger_K8S_POC/scripts/script.sh
+          name: scripts-volume
         - name: run
           hostPath:
             path: /var/run 
