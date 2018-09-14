@@ -55,10 +55,10 @@ peer chaincode query -C mychannel -n mycc -c '{"Args":["query","b"]}'
 
 NB:
 
-1)Hyperledger uses configuration located inside the *crypto-config* and *channel-artifacts* folders to set up the blockchain (peers, orderer, ...).
+1. Hyperledger uses configuration located inside the *crypto-config* and *channel-artifacts* folders to set up the blockchain (peers, orderer, ...).
 As the **Kubernetes** containers need to have access to them, they are mounted as hostPath volumes and not NFS volumes as most tutorials on the net do.
 I did that so as to simplify as much as possible the set up of a working environment because I did not wand to spend time on a NFS server setup (it may be simple to do but I did not know anything about it at the time of the POC).
 
-2) One of the biggest issues I encountered was the instantiation of the blockchain. Indeed by default the peer creates a dedicated docker container for the chaincode using the docker daemon of the host.
+2. One of the biggest issues I encountered was the instantiation of the blockchain. Indeed by default the peer creates a dedicated docker container for the chaincode using the docker daemon of the host.
 This is problematic because in this case the container does not belong to the K8S cluster and thus cannot communicate with the it. As a consequence, it cannot reach back to the peer as they are not in the same network.
 The solution I used was to add to the Peers' pods a *Docker daemon* container that the peer connects to in order to create the chaincode container. Thus they are on the same network and can communicate together.
