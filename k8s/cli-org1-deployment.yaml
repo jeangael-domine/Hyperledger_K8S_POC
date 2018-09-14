@@ -37,7 +37,7 @@ spec:
           - name: CORE_PEER_LOCALMSPID
             value: Org1MSP
           - name: CORE_PEER_MSPCONFIGPATH
-            value: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+            value: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1-node-port/users/Admin@org1-node-port/msp
           workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
           command: [ "/bin/bash", "-c", "--" ]
           args: [ "while true; do sleep 30; done;" ]

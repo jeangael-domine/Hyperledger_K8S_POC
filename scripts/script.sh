@@ -15,109 +15,109 @@ DELAY="$2"
 : ${TIMEOUT:="60"}
 COUNTER=1
 MAX_RETRY=5
-ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/node-port/orderers/orderer.node-port/msp/tlscacerts/tlsca.node-port-cert.pem
 
 echo "Channel name : "$CHANNEL_NAME
 
 # verify the result of the end-to-end test
 verifyResult () {
-	if [ $1 -ne 0 ] ; then
-		echo "!!!!!!!!!!!!!!! "$2" !!!!!!!!!!!!!!!!"
+    if [ $1 -ne 0 ] ; then
+        echo "!!!!!!!!!!!!!!! "$2" !!!!!!!!!!!!!!!!"
     echo "========= ERROR !!! FAILED to execute End-2-End Scenario ==========="
-		echo
-   		exit 1
-	fi
+        echo
+           exit 1
+    fi
 }
 
 setGlobals () {
 
-	if [ $1 -eq 0 -o $1 -eq 1 ] ; then
-		CORE_PEER_LOCALMSPID="Org1MSP"
-		CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0-org1-node-port/tls/ca.crt
-		CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-		if [ $1 -eq 0 ]; then
-			CORE_PEER_ADDRESS=peer0-org1-node-port:7051
-		else
-			CORE_PEER_ADDRESS=peer1-org1-node-port:7051
-			CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-		fi
-	fi
+    if [ $1 -eq 0 -o $1 -eq 1 ] ; then
+        CORE_PEER_LOCALMSPID="Org1MSP"
+        CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1-node-port/peers/peer0-org1-node-port/tls/ca.crt
+        CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1-node-port/users/Admin@org1-node-port/msp
+        if [ $1 -eq 0 ]; then
+            CORE_PEER_ADDRESS=peer0-org1-node-port:7051
+        else
+            CORE_PEER_ADDRESS=peer1-org1-node-port:7051
+            CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1-node-port/users/Admin@org1-node-port/msp
+        fi
+    fi
 
-	env |grep CORE
+    env |grep CORE
 }
 
 createChannel() {
-	setGlobals 0
+    setGlobals 0
 
 
-	peer channel create -o orderer-node-port:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
-	res=$?
-	cat log.txt
-	verifyResult $res "Channel cre-node-port"
-	echo "===================== Ch-node-portNNEL_NAME\" is created successfully ===================== "
-	echo
+    peer channel create -o orderer-node-port:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
+    res=$?
+    cat log.txt
+    verifyResult $res "Channel cre-node-port"
+    echo "===================== Ch-node-portNNEL_NAME\" is created successfully ===================== "
+    echo
 }
 
 updateAnchorPeers() {
-	PEER=$1
-  	setGlobals $PEER
-  	peer channel update -o orderer-node-port:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx >&log.txt
-	res=$?
-	cat log.txt
-	verifyResult $res "Anchor peer update failed"
-	echo "===================== Anchor peers for org \"$CORE_PEER_LOCALMSPID\" on \"$CHANNEL_NAME\" is updated successfully ===================== "
-	sleep $DELAY
-	echo
+    PEER=$1
+      setGlobals $PEER
+      peer channel update -o orderer-node-port:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx >&log.txt
+    res=$?
+    cat log.txt
+    verifyResult $res "Anchor peer update failed"
+    echo "===================== Anchor peers for org \"$CORE_PEER_LOCALMSPID\" on \"$CHANNEL_NAME\" is updated successfully ===================== "
+    sleep $DELAY
+    echo
 }
 
 ## Sometimes Join takes time hence RETRY atleast for 5 times
 joinWithRetry () {
-	peer channel join -b $CHANNEL_NAME.block  >&log.txt
-	res=$?
-	cat log.txt
-	if [ $res -ne 0 -a $COUNTER -lt $MAX_RETRY ]; then
-		COUNTER=` expr $COUNTER + 1`
-		echo "PEER$1 failed to join the channel, Retry after 2 seconds"
-		sleep $DELAY
-		joinWithRetry $1
-	else
-		COUNTER=1
-	fi
+    peer channel join -b $CHANNEL_NAME.block  >&log.txt
+    res=$?
+    cat log.txt
+    if [ $res -ne 0 -a $COUNTER -lt $MAX_RETRY ]; then
+        COUNTER=` expr $COUNTER + 1`
+        echo "PEER$1 failed to join the channel, Retry after 2 seconds"
+        sleep $DELAY
+        joinWithRetry $1
+    else
+        COUNTER=1
+    fi
   verifyResult $res "After $MAX_RETRY attempts, PEER$ch has failed to Join the Channel"
 }
 
 joinChannel () {
-	for ch in 0 1; do
-		setGlobals $ch
-		joinWithRetry $ch
-		echo "===================== PEER$ch joined on the channel \"$CHANNEL_NAME\" ===================== "
-		sleep $DELAY
-		echo
-	done
+    for ch in 0 1; do
+        setGlobals $ch
+        joinWithRetry $ch
+        echo "===================== PEER$ch joined on the channel \"$CHANNEL_NAME\" ===================== "
+        sleep $DELAY
+        echo
+    done
 }
 
 installChaincode () {
-	PEER=$1
-	setGlobals $PEER
-	peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 >&log.txt
-	res=$?
-	cat log.txt
+    PEER=$1
+    setGlobals $PEER
+    peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 >&log.txt
+    res=$?
+    cat log.txt
         verifyResult $res "Chaincode installation on remote peer PEER$PEER has Failed"
-	echo "===================== Chaincode is installed on remote peer PEER$PEER ===================== "
-	echo
+    echo "===================== Chaincode is installed on remote peer PEER$PEER ===================== "
+    echo
 }
 
 instantiateChaincode () {
-	PEER=$1
-	setGlobals $PEER
-	# while 'peer chaincode' command can get the orderer endpoint from the peer (if join was successful),
-	# lets supply it directly as we know it using the "-o" option
-	peer chaincode instantiate -o orderer-node-port:7050 -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init","a","100","b","200"]}' -P "OR	('Org1MSP.member','Org2MSP.member')" >&log.txt
-	res=$?
-	cat log.txt
-	verifyResult $res "Chaincode instantiation on PEER$PEER on channel '$CHANNEL_NAME' failed"
-	echo "===================== Chaincode Instantiation on PEER$PEER on channel '$CHANNEL_NAME' is successful ===================== "
-	echo
+    PEER=$1
+    setGlobals $PEER
+    # while 'peer chaincode' command can get the orderer endpoint from the peer (if join was successful),
+    # lets supply it directly as we know it using the "-o" option
+    peer chaincode instantiate -o orderer-node-port:7050 -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init","a","100","b","200"]}' -P "OR	('Org1MSP.member','Org2MSP.member')" >&log.txt
+    res=$?
+    cat log.txt
+    verifyResult $res "Chaincode instantiation on PEER$PEER on channel '$CHANNEL_NAME' failed"
+    echo "===================== Chaincode Instantiation on PEER$PEER on channel '$CHANNEL_NAME' is successful ===================== "
+    echo
 }
 
 chaincodeQuery () {
@@ -140,26 +140,26 @@ chaincodeQuery () {
   echo
   cat log.txt
   if test $rc -eq 0 ; then
-	echo "===================== Query on PEER$PEER on channel '$CHANNEL_NAME' is successful ===================== "
+    echo "===================== Query on PEER$PEER on channel '$CHANNEL_NAME' is successful ===================== "
   else
-	echo "!!!!!!!!!!!!!!! Query result on PEER$PEER is INVALID !!!!!!!!!!!!!!!!"
+    echo "!!!!!!!!!!!!!!! Query result on PEER$PEER is INVALID !!!!!!!!!!!!!!!!"
         echo "================== ERROR !!! FAILED to execute End-2-End Scenario =================="
-	echo
-	exit 1
+    echo
+    exit 1
   fi
 }
 
 chaincodeInvoke () {
-	PEER=$1
-	setGlobals $PEER
-	# while 'peer chaincode' command can get the orderer endpoint from the peer (if join was successful),
-	# lets supply it directly as we know it using the "-o" option
-	peer chaincode invoke -o orderer-node-port:7050 -C $CHANNEL_NAME -n mycc -c '{"Args":["invoke","a","b","10"]}' >&log.txt
-	res=$?
-	cat log.txt
-	verifyResult $res "Invoke execution on PEER$PEER failed "
-	echo "===================== Invoke transaction on PEER$PEER on channel '$CHANNEL_NAME' is successful ===================== "
-	echo
+    PEER=$1
+    setGlobals $PEER
+    # while 'peer chaincode' command can get the orderer endpoint from the peer (if join was successful),
+    # lets supply it directly as we know it using the "-o" option
+    peer chaincode invoke -o orderer-node-port:7050 -C $CHANNEL_NAME -n mycc -c '{"Args":["invoke","a","b","10"]}' >&log.txt
+    res=$?
+    cat log.txt
+    verifyResult $res "Invoke execution on PEER$PEER failed "
+    echo "===================== Invoke transaction on PEER$PEER on channel '$CHANNEL_NAME' is successful ===================== "
+    echo
 }
 
 ## Create channel

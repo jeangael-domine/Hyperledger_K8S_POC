@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: orderer-deployment
 spec:
-  replicas: 1  
+  replicas: 1
   selector:
     matchLabels:
       component: orderer
@@ -12,6 +12,7 @@ spec:
       labels:
         component: orderer
     spec:
+      hostname: orderer-node-port
       containers:
       - name: orderer
         image: hyperledger/fabric-orderer
@@ -53,7 +54,7 @@ spec:
            name: genesis-block-volume
       volumes:
         - hostPath:
-            path: /root/Hyperledger_K8S_POC/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp
+            path: /root/Hyperledger_K8S_POC/crypto-config/ordererOrganizations/node-port/orderers/orderer.node-port/msp
           name: orderer-msp-volume
         - hostPath:
             path: /root/Hyperledger_K8S_POC/channel-artifacts/genesis.block
