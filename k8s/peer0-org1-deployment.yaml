@@ -12,6 +12,7 @@ spec:
       labels:
         component: peer0-org1
     spec:
+      hostname: peer0-org1-node-port
       containers:
         - name: couchdb0
           image: hyperledger/fabric-couchdb
@@ -74,10 +75,10 @@ spec:
           #  subPath: channel-artifacts
           - mountPath: /etc/hyperledger/fabric/msp
             name: peer0-org1-msp-volume
-            #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
+            #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1-node-port/msp
           #- mountPath: /etc/hyperledger/fabric/tls
           #  name: certificate
-          #  #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/
+          #  #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1-node-port/tls/
           #  subPath: peers/peer0.org1/tls
           - mountPath: /host/var/run/
             name: run
@@ -91,7 +92,7 @@ spec:
             name: docker-graph-storage
       volumes:
         - hostPath:
-            path: /root/Hyperledger_K8S_POC/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
+            path: /root/Hyperledger_K8S_POC/crypto-config/peerOrganizations/org1-node-port/peers/peer0.org1-node-port/msp
           name: peer0-org1-msp-volume
         - hostPath:
             path: /root/Hyperledger_K8S_POC/channel-artifacts/genesis.block
