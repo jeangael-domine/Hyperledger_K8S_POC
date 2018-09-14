@@ -87,7 +87,7 @@ spec:
             privileged: true
           volumeMounts:
             - mountPath: /var/lib/docker
-              mountPropagation: ""
+              mountPropagation: "Bidirectional"
               name: docker-graph-storage
       volumes:
         - hostPath:
