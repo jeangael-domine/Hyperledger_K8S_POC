@@ -28,7 +28,7 @@ spec:
               #    name: couch-db-secret
               #    key: COUCHDB_PASSWORD
           volumeMounts:
-            - mountPath: /opt/couchdb
+            - mountPath: /opt/couchdb/data
               name: couchdb-storage
         - name: peer0-org1
           image: hyperledger/fabric-peer
