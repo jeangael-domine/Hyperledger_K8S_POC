@@ -27,6 +27,9 @@ spec:
               #  secretKeyRef:
               #    name: couch-db-secret
               #    key: COUCHDB_PASSWORD
+          volumeMounts:
+            - mountPath: /opt/couchdb/data
+              name: couchdb-storage
         - name: peer0-org1
           image: hyperledger/fabric-peer
           env:
@@ -70,26 +73,26 @@ spec:
           command: ["peer"]
           args: ["node","start"]
           volumeMounts:
-          #- mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts 
-          #  name: certificate
-          #  subPath: channel-artifacts
-          - mountPath: /etc/hyperledger/fabric/msp
-            name: peer0-org1-msp-volume
-            #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1-node-port/msp
-          #- mountPath: /etc/hyperledger/fabric/tls
-          #  name: certificate
-          #  #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1-node-port/tls/
-          #  subPath: peers/peer0.org1/tls
-          - mountPath: /host/var/run/
-            name: run
+            #- mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts 
+            #  name: certificate
+            #  subPath: channel-artifacts
+            - mountPath: /etc/hyperledger/fabric/msp
+              name: peer0-org1-msp-volume
+              #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1-node-port/msp
+            #- mountPath: /etc/hyperledger/fabric/tls
+            #  name: certificate
+            #  #subPath: crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1-node-port/tls/
+            #  subPath: peers/peer0.org1/tls
+            - mountPath: /host/var/run/
+              name: run
         - image: docker:dind
           name: dind
           securityContext:
             privileged: true
           volumeMounts:
-          - mountPath: /var/lib/docker
-            mountPropagation: "Bidirectional"
-            name: docker-graph-storage
+            - mountPath: /var/lib/docker
+              mountPropagation: "Bidirectional"
+              name: docker-graph-storage
       volumes:
         - hostPath:
             path: /root/Hyperledger_K8S_POC/crypto-config/peerOrganizations/org1-node-port/peers/peer0.org1-node-port/msp
@@ -102,4 +105,7 @@ spec:
             path: /var/run
         - name: docker-graph-storage 
           emptyDir: {}
+        - name: couchdb-storage
+          persistentVolumeClaim:
+            claimName: couchdb-peer0-org1-volume-claim
 # kubectl create secret generic couch_db_secret --from-literal COUCHDB_PASSWORD=couchdb
