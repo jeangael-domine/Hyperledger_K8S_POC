@@ -1,3 +1,28 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: couchdb-volume
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /tmp/couchdb
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: couchdb-volume-claim
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Mi
+
 #apiVersion: v1
 #kind: PersistentVolume
 #metadata:
