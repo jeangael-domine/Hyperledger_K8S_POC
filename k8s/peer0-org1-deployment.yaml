@@ -107,5 +107,5 @@ spec:
           emptyDir: {}
         - name: couchdb-storage
           persistentVolumeClaim:
-            claimName: couchdb-volume-claim
+            claimName: couchdb-peer0-org1-volume-claim
 # kubectl create secret generic couch_db_secret --from-literal COUCHDB_PASSWORD=couchdb

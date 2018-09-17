@@ -11,7 +11,8 @@ kubectl delete service orderer-node-port
 kubectl delete service peer0-org1-node-port
 kubectl delete service peer1-org1-node-port
 
-kubectl delete pvc couchdb-volume-claim
+kubectl delete pvc couchdb-peer0-org1-volume-claim
+kubectl delete pvc couchdb-peer1-org1-volume-claim
 
 printf "Deployments\n"
 kubectl get deployments
