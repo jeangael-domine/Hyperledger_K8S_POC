@@ -27,6 +27,9 @@ spec:
               #  secretKeyRef:
               #    name: couch-db-secret
               #    key: COUCHDB_PASSWORD
+          volumeMounts:
+            - mountPath: /opt/couchdb/data
+              name: couchdb-storage
         - name: peer1-org1
           image: hyperledger/fabric-peer
           env:
@@ -99,4 +102,7 @@ spec:
             path: /var/run
         - name: docker-graph-storage 
           emptyDir: {}
+        - name: couchdb-storage
+          persistentVolumeClaim:
+            claimName: couchdb-volume-claim
 # kubectl create secret generic couch_db_secret --from-literal COUCHDB_PASSWORD=couchdb
