@@ -32,7 +32,7 @@ where XXX is the name of the CLI pod which can retrieved using `kubectl get pods
 peer chaincode instantiate -o orderer-node-port:7050 -C mychannel -n mycc -v 1.0 -c '{"Args":["init","a","100","b","200"]}' -P "OR('Org1MSP.member','Org2MSP.member')"
 ```
 
-.) Query the blockchain:
+5. Query the blockchain:
 
 ```
 peer chaincode query -C mychannel -n mycc -c '{"Args":["query","a"]}'
