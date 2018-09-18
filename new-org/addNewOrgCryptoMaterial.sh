@@ -5,7 +5,7 @@ CHANNEL_NAME=mychannel
 ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/node-port/orderers/orderer.node-port/msp/tlscacerts/tlsca.node-port-cert.pem
 
 cd $WORKING_DIR
-rm -f config_block.pb config.json config.pb modified_config.json modified_config.pb  org2.json org2_update_in_envelope.json org2_update_in_envelope.pb org2_update.json org2_update.pb
+rm -f config_block.pb config.json config.pb modified_config.json modified_config.pb org2_update_in_envelope.json org2_update_in_envelope.pb org2_update.json org2_update.pb
 cd -
 
 echo "===================== Fetching config of channel '$CHANNEL_NAME' ===================== "
@@ -37,7 +37,7 @@ configtxlator proto_decode --input $WORKING_DIR/org2_update.pb --type common.Con
 echo
 
 echo "===================== Wrapping the update file in an envelope message ===================== "
-echo '{"payload":{"header":{"channel_header":{"channel_id":"$CHANNEL_NAME", "type":2}},"data":{"config_update":'$(cat $WORKING_DIR/org2_update.json)'}}}' | jq . > $WORKING_DIR/org2_update_in_envelope.json
+echo '{"payload":{"header":{"channel_header":{"channel_id":"'$CHANNEL_NAME'", "type":2}},"data":{"config_update":'$(cat $WORKING_DIR/org2_update.json)'}}}' | jq . > $WORKING_DIR/org2_update_in_envelope.json
 echo
 
 echo "===================== Converting the envelope message into the fully fledged protobuf format required by Fabric ===================== "
