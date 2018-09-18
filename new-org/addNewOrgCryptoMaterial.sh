@@ -3,6 +3,9 @@
 WORKING_DIR=/opt/gopath/src/github.com/hyperledger/fabric/peer/new-org
 CHANNEL_NAME=mychannel
 
+cd $WORKING_DIR
+rm -f config_block.pb config.json config.pb modified_config.json modified_config.pb  org2.json org2_update_in_envelope.json org2_update_in_envelope.pb org2_update.json org2_update.pb
+cd -
 
 echo "===================== Fetching config of channel '$CHANNEL_NAME' ===================== "
 peer channel fetch config $WORKING_DIR/config_block.pb -o orderer-node-port:7050 -c $CHANNEL_NAME
