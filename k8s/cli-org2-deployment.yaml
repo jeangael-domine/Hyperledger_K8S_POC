@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: cli-org2-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: cli-org2
+  template:
+    metadata:
+      labels:
+       component: cli-org2
+    spec:
+      containers:
+        - name: cli
+          image:  hyperledger/fabric-tools
+          env:
+          - name: CORE_PEER_TLS_ENABLED
+            value: "false"
+          #- name: CORE_PEER_TLS_CERT_FILE
+          #  value: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2/peers/peer0.org2/tls/server.crt
+          #- name: CORE_PEER_TLS_KEY_FILE
+          #  value: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2/peers/peer0.org2/tls/server.key
+          #- name: CORE_PEER_TLS_ROOTCERT_FILE
+          #  value: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2/peers/peer0.org2/tls/ca.crt
+          - name: CORE_VM_ENDPOINT
+            value: unix:///host/var/run/docker.sock
+          - name: GOPATH
+            value: /opt/gopath
+          - name: CORE_LOGGING_LEVEL
+            value: DEBUG
+          - name: CORE_PEER_ID
+            value: cli
+          - name: CORE_PEER_ADDRESS
+            value: peer0-org2:7051
+          - name: CORE_PEER_LOCALMSPID
+            value: org2MSP
+          - name: CORE_PEER_MSPCONFIGPATH
+            value: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2/users/Admin@org2/msp
+          workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+          command: [ "/bin/bash", "-c", "--" ]
+          args: [ "while true; do sleep 30; done;" ]
+          volumeMounts:
+           - mountPath: /host/var/run/
+             name: run
+           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02
+             name: chaincode-volume
+           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto
+             name: crypto-volume
+           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+             name: channel-volume
+           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/new-org
+             name: new-org-volume
+           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/script.sh
+             name: scripts-volume
+      volumes:
+        - hostPath:
+            path: /root/Hyperledger_K8S_POC/crypto-config
+          name: crypto-volume
+        - hostPath:
+            path: /root/Hyperledger_K8S_POC/chaincode/chaincode_example02/go
+          name: chaincode-volume
+        - hostPath:
+            path: /root/Hyperledger_K8S_POC/channel-artifacts
+          name: channel-volume
+        - hostPath:
+            path: /root/Hyperledger_K8S_POC/new-org
+          name: new-org-volume
+        - hostPath:
+            path: /root/Hyperledger_K8S_POC/scripts/script.sh
+          name: scripts-volume
+        - name: run
+          hostPath:
+            path: /var/run 

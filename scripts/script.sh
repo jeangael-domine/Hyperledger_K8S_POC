@@ -54,7 +54,7 @@ createChannel() {
     res=$?
     cat log.txt
     verifyResult $res "Channel created"
-    echo "===================== $CHANNEL_NAME\" is created successfully ===================== "
+    echo "===================== \"$CHANNEL_NAME\" is created successfully ===================== "
     echo
 }
 
