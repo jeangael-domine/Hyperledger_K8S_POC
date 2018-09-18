@@ -53,8 +53,8 @@ createChannel() {
     peer channel create -o orderer-node-port:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
     res=$?
     cat log.txt
-    verifyResult $res "Channel cre-node-port"
-    echo "===================== Ch-node-portNNEL_NAME\" is created successfully ===================== "
+    verifyResult $res "Channel created"
+    echo "===================== $CHANNEL_NAME\" is created successfully ===================== "
     echo
 }
 
