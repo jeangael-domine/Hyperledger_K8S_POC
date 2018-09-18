@@ -33,7 +33,7 @@ configtxlator proto_decode --input $WORKING_DIR/org2_update.pb --type common.Con
 echo
 
 echo "===================== Wrapping the update file in an envelope message ===================== "
-echo '{"payload":{"header":{"channel_header":{"channel_id":"mychannel", "type":2}},"data":{"config_update":'$(cat org2_update.json)'}}}' | jq . > $WORKING_DIR/org2_update_in_envelope.json
+echo '{"payload":{"header":{"channel_header":{"channel_id":"mychannel", "type":2}},"data":{"config_update":'$(cat $WORKING_DIR/org2_update.json)'}}}' | jq . > $WORKING_DIR/org2_update_in_envelope.json
 echo
 
 echo "===================== Converting the envelope message into the fully fledged protobuf format required by Fabric ===================== "
