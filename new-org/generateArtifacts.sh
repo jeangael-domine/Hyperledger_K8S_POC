@@ -1,10 +1,10 @@
 #!/bin/sh
 
 WORKING_DIRECTORY=$HOME/Hyperledger_K8S_POC
-FABRIC_CFG_PATH=$WORKING_DIRECTORY 
+FABRIC_CFG_PATH=$WORKING_DIRECTORY/new-org
 
-cryptogen generate --config=$WORKING_DIRECTORY/new-org/crypto-config.yaml --output="$WORKING_DIRECTORY/new-org/crypto-config"
+cryptogen generate --config=$FABRIC_CFG_PATH/crypto-config.yaml --output="$FABRIC_CFG_PATH/crypto-config"
 
-configtxgen -printOrg Org2MSP > $WORKING_DIRECTORY/new-org/org2.json
+configtxgen --configPath=$FABRIC_CFG_PATH -printOrg Org2MSP > $FABRIC_CFG_PATH/org2.json
 
-cp -R $WORKING_DIRECTORY/crypto-config/ordererOrganizations $WORKING_DIRECTORY/new-org/crypto-config/
+cp -R $WORKING_DIRECTORY/crypto-config/ordererOrganizations $FABRIC_CFG_PATH/crypto-config/
