@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peer1-org2-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: peer1-org2
+  template:
+    metadata:
+      labels:
+        component: peer1-org2
+    spec:
+      #hostname: peer1-org2-node-port
+      containers:
+        - name: couchdb0
+          image: hyperledger/fabric-couchdb
+          ports:
+            - containerPort: 5984
+          env:
+            - name: COUCHDB_USER
+              value:
+            - name: COUCHDB_PASSWORD
+              value:
+              #valueFrom:
+              #  secretKeyRef:
+              #    name: couch-db-secret
+              #    key: COUCHDB_PASSWORD
+          volumeMounts:
+            - mountPath: /opt/couchdb/data
+              name: couchdb-storage
+        - name: peer1-org2
+          image: hyperledger/fabric-peer
+          env:
+          - name: CORE_LEDGER_STATE_STATEDATABASE
+            value: "CouchDB"
+          - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
+            value: "localhost:5984"
+          - name: CORE_VM_ENDPOINT
+            value: "http://localhost:2375"
+          - name: CORE_LOGGING_LEVEL
+            value: "DEBUG"
+          - name: CORE_PEER_TLS_ENABLED
+            value: "false"
+          - name: CORE_PEER_GOSSIP_USELEADERELECTION
+            value: "true"
+          - name: CORE_PEER_GOSSIP_ORGLEADER
+            value: "false" 
+          - name: CORE_PEER_PROFILE_ENABLED
+            value: "true"
+          #- name: CORE_PEER_TLS_CERT_FILE
+          #  value: "/etc/hyperledger/fabric/tls/server.crt" 
+          #- name: CORE_PEER_TLS_KEY_FILE
+          #  value: "/etc/hyperledger/fabric/tls/server.key"
+          #- name: CORE_PEER_TLS_ROOTCERT_FILE
+          #  value: "/etc/hyperledger/fabric/tls/ca.crt"
+          - name: CORE_PEER_ID
+            value: peer1-org2:7051
+          - name: CORE_PEER_ADDRESS
+            value: peer1-org2:7051
+          - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
+            value: peer1-org2:7051
+          - name: CORE_PEER_LOCALMSPID
+            value: Org2MSP
+          - name: CORE_PEER_CHAINCODELISTENADDRESS
+            value: 0.0.0.0:7052
+          - name: CORE_PEER_GOSSIP_USELEADERELECTION
+            value: "true"
+          - name: CORE_PEER_GOSSIP_ORGLEADER
+            value: "false"
+          workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+          ports:
+          - containerPort: 7051
+          - containerPort: 7052
+          - containerPort: 7053
+          command: ["peer"]
+          args: ["node","start"]
+          volumeMounts:
+            - mountPath: /etc/hyperledger/fabric/msp
+              name: peer1-org2-msp-volume  
+            - mountPath: /host/var/run/
+              name: run
+        - image: docker:dind
+          name: dind
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /var/lib/docker
+              mountPropagation: "Bidirectional"
+              name: docker-graph-storage
+      volumes:
+        - hostPath:
+            path: /root/Hyperledger_K8S_POC/new-org/crypto-config/peerOrganizations/org2/peers/peer1.org2/msp
+          name: peer1-org2-msp-volume
+        - hostPath:
+            path: /root/Hyperledger_K8S_POC/channel-artifacts/genesis.block
+          name: genesis-block-volume
+        - name: run
+          hostPath:
+            path: /var/run
+        - name: docker-graph-storage 
+          emptyDir: {}
+        - name: couchdb-storage
+          persistentVolumeClaim:
+            claimName: couchdb-peer1-org2-volume-claim
+# kubectl create secret generic couch_db_secret --from-literal COUCHDB_PASSWORD=couchdb
