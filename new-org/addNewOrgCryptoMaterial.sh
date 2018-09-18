@@ -3,9 +3,9 @@
 WORKING_DIR=/opt/gopath/src/github.com/hyperledger/fabric/peer/new-org
 CHANNEL_NAME=mychannel
 
-peer channel fetch config config_block.pb -o orderer-node-port:7050 -c $CHANNEL_NAME
+peer channel fetch config $WORKING_DIR/config_block.pb -o orderer-node-port:7050 -c $CHANNEL_NAME
 
-configtxlator proto_decode --input config_block.pb --type common.Block | jq .data.data[0].payload.data.config > $WORKING_DIR/config.json
+configtxlator proto_decode --input $WORKING_DIR/config_block.pb --type common.Block | jq .data.data[0].payload.data.config > $WORKING_DIR/config.json
 
 jq -s '.[0] * {"channel_group":{"groups":{"Application":{"groups": {"Org2MSP":.[1]}}}}}' $WORKING_DIR/config.json $WORKING_DIR/org2.json > $WORKING_DIR/modified_config.json
 
