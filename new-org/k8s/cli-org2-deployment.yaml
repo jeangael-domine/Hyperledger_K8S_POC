@@ -37,7 +37,7 @@ spec:
           - name: CORE_PEER_LOCALMSPID
             value: Org2MSP
           - name: CORE_PEER_MSPCONFIGPATH
-            value: /opt/gopath/src/github.com/hyperledger/fabric/peer/new-org/crypto/peerOrganizations/org2/users/Admin@org2/msp
+            value: /opt/gopath/src/github.com/hyperledger/fabric/peer/new-org/crypto-config/peerOrganizations/org2/users/Admin@org2/msp
           workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
           command: [ "/bin/bash", "-c", "--" ]
           args: [ "while true; do sleep 30; done;" ]
@@ -50,8 +50,8 @@ spec:
              name: crypto-volume
            - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
              name: channel-volume
-           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/new-org/crypto
-             name: new-org-crypto-volume
+           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/new-org
+             name: new-org-volume
            - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/script.sh
              name: scripts-volume
       volumes:
@@ -65,8 +65,8 @@ spec:
             path: /root/Hyperledger_K8S_POC/channel-artifacts
           name: channel-volume
         - hostPath:
-            path: /root/Hyperledger_K8S_POC/new-org/crypto-config
-          name: new-org-crypto-volume
+            path: /root/Hyperledger_K8S_POC/new-org
+          name: new-org-volume
         - hostPath:
             path: /root/Hyperledger_K8S_POC/scripts/script.sh
           name: scripts-volume
