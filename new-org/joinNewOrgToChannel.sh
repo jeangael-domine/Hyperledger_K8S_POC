@@ -1,5 +1,6 @@
 #!/bin/sh
 
+WORKING_DIR=/opt/gopath/src/github.com/hyperledger/fabric/peer/new-org
 ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/node-port/orderers/orderer.node-port/msp/tlscacerts/tlsca.node-port-cert.pem
 CHANNEL_NAME=mychannel
 
