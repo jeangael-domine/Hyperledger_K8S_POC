@@ -12,7 +12,7 @@ spec:
       labels:
         component: peer0-org2
     spec:
-      #hostname: peer0-org2-node-port
+      hostname: peer0-org2
       containers:
         - name: couchdb0
           image: hyperledger/fabric-couchdb
